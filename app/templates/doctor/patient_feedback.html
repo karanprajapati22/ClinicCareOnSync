@@ -1,0 +1,148 @@
+{% extends "doctor/doctor_dashboard.html" %}
+{% block content %}
+
+<style>
+.page-header {
+    background: linear-gradient(135deg, #007c9d, #11b2cb);
+    color: #fff;
+    padding: 22px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+}
+
+.table-container {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+.filter-box {
+    background: #f6fcff;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.table thead th {
+    background: #f4fbff;
+    font-weight: 700;
+    text-align: center;
+}
+
+.table tbody td {
+    text-align: center;
+}
+
+.table-hover tbody tr:hover {
+    background: #f6fcff;
+}
+
+.message-box {
+    max-width: 260px;
+    margin: auto;
+    background: #f8fbfd;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.date-badge {
+    background: #eef3f7;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.empty-box {
+    padding: 25px;
+    text-align: center;
+    color: #6c757d;
+}
+</style>
+
+<div class="container-fluid">
+
+    <!-- HEADER -->
+    <div class="page-header d-flex justify-content-between align-items-center">
+        <div>
+            <h3>Patient Feedback</h3>
+            <p class="mb-0">Feedback received from your patients</p>
+        </div>
+
+        <span class="badge bg-primary fs-6">
+            Total: {{ feedbacks|length }}
+        </span>
+    </div>
+
+    <div class="table-container">
+
+        <!-- FILTER -->
+        <form method="GET" class="filter-box row g-3 align-items-end">
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">Filter by Date</label>
+                <input type="date" name="date" value="{{ selected_date }}" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <button class="btn btn-primary w-100">
+                    Apply Filter
+                </button>
+            </div>
+
+        </form>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Patient</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for f in feedbacks %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ f.name }}</td>
+                        <td>{{ f.email }}</td>
+
+                        <td>
+                            <div class="message-box">
+                                {{ f.message }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="date-badge">
+                                {{ f.created_at|date:"d M Y" }}
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-box">
+                                No feedback available.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

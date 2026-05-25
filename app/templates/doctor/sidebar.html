@@ -1,0 +1,33 @@
+<div class="sidebar">
+    <h4 class="text-center text-white mb-4">Doctor Panel</h4>
+
+    <a href="{% url 'doctor_dashboard' %}">Dashboard</a>
+    <a href="{% url 'doctor_appointments' %}">My Appointments</a>
+    <a href="{% url 'manage_services' %}">Services</a>
+    {% comment %} <a href="{% url 'add_service' %}">Add Service</a> {% endcomment %}
+    <a href="{% url 'doctor_patient_feedback' %}">Patient Feedback</a>
+    <a href="{% url 'doctor_profile' %}">Profile</a>
+    <a href="{% url 'doctor_logout' %}">Logout</a>
+</div>
+
+<style>
+.sidebar {
+    width: 230px;
+    height: 100vh;
+    position: fixed;
+    background: #007c9d;
+    padding-top: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sidebar a:hover {
+    background: #005f75;
+}
+</style>

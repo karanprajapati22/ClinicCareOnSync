@@ -1,0 +1,6 @@
+Admin login id pass :
+
+Id : admin@gmail.com
+pass : 123
+
+------------

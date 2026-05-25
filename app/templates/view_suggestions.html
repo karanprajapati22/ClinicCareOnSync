@@ -1,0 +1,183 @@
+{% extends "nav.html" %}
+{% block content %}
+
+<style>
+
+/* ===== PAGE WRAPPER ===== */
+.suggestion-wrapper {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+}
+
+/* ===== CARD ===== */
+.suggestion-card {
+    background: #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 25px 65px rgba(0,0,0,0.12);
+    padding: 55px;
+    width: 100%;
+    max-width: 1100px;   /* Bigger width */
+    animation: fadeUp 0.6s ease;
+}
+
+/* ===== TITLE ===== */
+.suggestion-title {
+    text-align: center;
+    color: #007c9d;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.suggestion-subtitle {
+    text-align: center;
+    color: #6c757d;
+    font-size: 15px;
+    margin-bottom: 35px;
+}
+
+/* ===== SEARCH + SORT ===== */
+.search-box input {
+    border-radius: 30px;
+    padding: 10px 20px;
+}
+
+.sort-select {
+    border-radius: 30px;
+}
+
+.btn-primary {
+    border-radius: 30px;
+}
+
+.btn-outline-secondary {
+    border-radius: 30px;
+}
+
+/* ===== TABLE ===== */
+.table thead {
+    background: #f1f9fc;
+}
+
+.table thead th {
+    font-weight: 600;
+    text-align: center;
+    padding: 14px;
+}
+
+.table tbody td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px;
+}
+
+.table tbody tr:hover {
+    background: #f7fbff;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+</style>
+
+<div class="suggestion-wrapper">
+
+    <div class="suggestion-card">
+
+        <h3 class="suggestion-title">Doctor Suggestions</h3>
+        <p class="suggestion-subtitle">
+            View recommendations provided by your doctors
+        </p>
+
+        <!-- SEARCH + SORT -->
+        <form method="GET" class="row mb-4">
+
+            <div class="col-md-5 search-box">
+                <input type="text"
+                       name="search"
+                       value="{{ search }}"
+                       class="form-control"
+                       placeholder="Search by Doctor Name">
+            </div>
+
+            <div class="col-md-3">
+                <select name="sort" class="form-select sort-select">
+                    <option value="latest" {% if sort == "latest" %}selected{% endif %}>
+                        Latest First
+                    </option>
+                    <option value="oldest" {% if sort == "oldest" %}selected{% endif %}>
+                        Oldest First
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">
+                    Apply
+                </button>
+            </div>
+
+            <div class="col-md-2">
+                <a href="{% url 'patient_suggestions' %}" class="btn btn-outline-secondary w-100">
+                    Reset
+                </a>
+            </div>
+
+        </form>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Suggestion</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for s in suggestions %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="fw-semibold">
+                            {{ s.doctor.doctor_name }}
+                        </td>
+                        <td>
+                            {{ s.created_at|date:"M d, Y" }}
+                        </td>
+                        <td style="max-width: 400px;">
+                            {{ s.suggestion }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            No suggestions available yet
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

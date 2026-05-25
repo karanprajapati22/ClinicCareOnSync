@@ -1,0 +1,112 @@
+{% extends 'nav.html' %}
+{% block content %}
+
+<style>
+/* ===== STOP ALL SCROLL ===== */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden !important;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===== PAGE WRAPPER (NAVBAR HEIGHT ADJUST) ===== */
+.page-wrapper {
+    height: calc(100vh - 80px); /* navbar height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* ===== BACKGROUND IMAGE ===== */
+.page-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://t4.ftcdn.net/jpg/15/14/91/77/240_F_1514917735_UubOYsR4oh5mS8dlgeQd2nvrT5bQ8teV.jpg");
+    background-size: cover;
+    background-position: center;
+    filter: blur(3px);
+    z-index: -1;
+}
+
+/* ===== LOGIN CARD ===== */
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+}
+
+/* Title */
+.login-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #007c9d;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Inputs */
+.form-control {
+    border-radius: 8px;
+}
+
+/* Button */
+.btn-primary {
+    background-color: #007c9d;
+    border: none;
+    border-radius: 25px;
+    padding: 12px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #00627a;
+}
+</style>
+
+<div class="page-wrapper">
+
+    <div class="login-card">
+
+        <div class="login-title">Verify OTP</div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">6-Digit OTP</label>
+                <input type="text"
+                       name="otp"
+                       class="form-control"
+                       placeholder="Enter 6-digit OTP"
+                       maxlength="6"
+                       required>
+            </div>
+
+            <button class="btn btn-primary w-100 mt-2">
+                Verify OTP
+            </button>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+            Back to
+            <a href="{% url 'login' %}" class="fw-semibold text-decoration-none">
+                Login
+            </a>
+        </p>
+
+    </div>
+</div>
+
+{% endblock %}

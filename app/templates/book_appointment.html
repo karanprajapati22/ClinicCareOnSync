@@ -1,0 +1,101 @@
+{% extends "nav.html" %}
+{% block content %}
+
+<style>
+/* ===== PAGE BACKGROUND ===== */
+.booking-wrapper {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== CARD ===== */
+.booking-card {
+    background: #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 20px 55px rgba(0,0,0,0.12);
+    padding: 40px;
+    width: 100%;
+    max-width: 520px;
+    animation: fadeUp 0.6s ease;
+}
+
+/* ===== TITLE ===== */
+.booking-title {
+    text-align: center;
+    color: #007c9d;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.booking-subtitle {
+    text-align: center;
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* ===== FORM ===== */
+.booking-card form p {
+    margin-bottom: 16px;
+}
+
+.booking-card label {
+    font-weight: 500;
+    color: #495057;
+}
+
+/* ===== BUTTON ===== */
+.booking-btn {
+    background: linear-gradient(135deg, #007c9d, #11b2cb);
+    border: none;
+    padding: 12px;
+    font-weight: 500;
+    border-radius: 30px;
+    transition: 0.3s;
+}
+
+.booking-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(17,178,203,0.4);
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<div class="booking-wrapper">
+
+    <div class="booking-card">
+
+        <h3 class="booking-title">Book Appointment</h3>
+        <p class="booking-subtitle">
+            Schedule your visit with our expert doctors
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="d-grid mt-4">
+                <button type="submit" class="btn booking-btn text-white">
+                    Confirm Appointment
+                </button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

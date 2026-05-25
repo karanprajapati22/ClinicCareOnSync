@@ -1,0 +1,80 @@
+<style>
+/* ===== SIDEBAR ===== */
+.sidebar {
+    position: fixed;
+    width: 240px;
+    height: 100vh;
+    background: #4FA3D1;  /* ✅ ORIGINAL COLOR (NOT CHANGED) */
+    color: #fff;
+    padding-top: 20px;
+}
+
+.sidebar h4 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.sidebar hr {
+    border-color: rgba(255,255,255,0.3);
+    margin: 10px 15px;
+}
+
+.sidebar a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 12px 20px;
+    margin: 4px 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(3px);
+}
+
+/* ACTIVE LINK */
+.sidebar a.active {
+    background: rgba(255,255,255,0.3);
+}
+
+.sidebar .section-title {
+    font-size: 13px;
+    padding: 8px 20px;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+</style>
+
+<div class="sidebar">
+    <h4>Admin Panel</h4>
+    <hr>
+
+    <!-- MAIN -->
+    <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+    <a href="{% url 'admin_departments' %}">Departments</a>
+    <a href="{% url 'doctor_category' %}">Doctor Categories</a>
+    <a href="{% url 'doctor_list' %}">Doctors</a>
+    <a href="{% url 'admin_users' %}">Patients</a>
+
+    <!-- MANAGEMENT -->
+    <div class="section-title">Management</div>
+
+    <a href="{% url 'admin_availability_list' %}">Doctor Availability</a>
+    <a href="{% url 'admin_doctor_feedback' %}">Doctor Feedback</a>
+
+    <!-- CONTACT -->
+    <a href="{% url 'admin_contact_list' %}" class="active">
+        Contact Messages
+    </a>
+
+    <hr>
+
+    <!-- LOGOUT -->
+    <a href="{% url 'admin_logout' %}" style="background: rgba(255,255,255,0.2);">
+        Logout
+    </a>
+</div>

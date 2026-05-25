@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Registered Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --main: #4FA3D1;
+            --bg: #F3F9FD;
+            --card: #FFFFFF;
+            --border: #D6EAF6;
+        }
+
+        body {
+            background-color: var(--bg);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 25px;
+        }
+
+        .topbar {
+            background: var(--card);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: var(--main);
+        }
+
+        .data-card {
+            background: var(--card);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .table thead {
+            background: #E9F4FB;
+        }
+
+        .table thead th {
+            font-weight: 600;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .table tbody td {
+            padding: 14px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f6fbff;
+        }
+
+        .badge-main {
+            background: var(--main);
+        }
+
+        .filter-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+{% include "admin/sidebar.html" %}
+
+<div class="main-content">
+
+    <div class="topbar d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="page-title mb-0">Registered Users</h4>
+            <small class="text-muted">User management</small>
+        </div>
+        <div>
+            <span class="badge badge-main fs-6">
+                Total Users: {{ total_users }}
+            </span>
+        </div>
+    </div>
+
+    <!-- 🔍 Search & Filter Section -->
+    <div class="filter-box row g-3">
+
+        <!-- Search -->
+        <div class="col-md-6">
+            <input type="text"
+                   id="searchInput"
+                   class="form-control"
+                   placeholder="Search by username, email, or mobile..."
+                   onkeyup="searchTable()">
+        </div>
+
+       <!-- Filter by Username -->
+        <div class="col-md-4">
+            <select id="usernameFilter"
+                    class="form-select"
+                    onchange="filterByUsername()">
+
+                <option value="">Filter by Username</option>
+
+                {% for u in users %}
+                    <option value="{{ u.username }}">
+                        {{ u.username }}
+                    </option>
+                {% endfor %}
+
+            </select>
+        </div>
+
+
+        <!-- Reset Button -->
+        <div class="col-md-2">
+            <button class="btn btn-outline-secondary w-100"
+                    onclick="resetFilters()">
+                Reset
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="data-card">
+        <table class="table" id="userTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.mobile }}</td>
+                    <td>{{ u.address }}</td>
+                    <td>{{ u.city }}</td>
+                    <td>
+                        <a href="{% url 'admin_user_edit' u.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'admin_user_delete' u.id %}"
+                           class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Are you sure?');">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No users found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- 🔎 Search Script -->
+<script>
+function searchTable() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let rows = document.querySelectorAll("#userTable tbody tr");
+
+    rows.forEach(row => {
+        let text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? "" : "none";
+    });
+}
+</script>
+
+<!-- 🏙 Filter Script -->
+<script>
+function filterByUsername() {
+
+    let selectedUsername =
+        document.getElementById("usernameFilter").value.toLowerCase();
+
+    let rows =
+        document.querySelectorAll("#userTable tbody tr");
+
+    rows.forEach(row => {
+
+        let username =
+            row.cells[1].innerText.toLowerCase();   // column index 1 = username
+
+        if (selectedUsername === "" || username === selectedUsername) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+}
+</script>
+
+
+</body>
+</html>

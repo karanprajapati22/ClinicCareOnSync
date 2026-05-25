@@ -1,0 +1,124 @@
+/* ================= GLOBAL ================= */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #9ccff7 !important;
+    margin: 0;
+}
+
+/* ================= NAVBAR ================= */
+nav.navbar.hospital-navbar {
+    background-color: #ffffff !important;
+    padding: 16px 0;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+    border-bottom: 1px solid #e6eef3;
+}
+
+nav.navbar .hospital-brand {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #007C9D !important;
+}
+
+nav.navbar .hospital-link {
+    color: #333333 !important;
+    font-weight: 500;
+    margin-left: 18px;
+    position: relative;
+}
+
+nav.navbar .hospital-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 2px;
+    background-color: #007C9D;
+    transition: width 0.3s ease;
+}
+
+nav.navbar .hospital-link:hover::after {
+    width: 100%;
+}
+
+nav.navbar .hospital-link:hover {
+    color: #007C9D !important;
+}
+
+nav.navbar .hospital-btn {
+    background-color: #007C9D !important;
+    color: #ffffff !important;
+    padding: 8px 22px;
+    border-radius: 25px;
+    font-weight: 500;
+    border: none;
+}
+
+nav.navbar .hospital-btn-outline {
+    border: 2px solid #007C9D !important;
+    color: #007C9D !important;
+    padding: 7px 20px;
+    border-radius: 25px;
+}
+
+nav.navbar .hospital-btn-outline:hover {
+    background-color: #007C9D !important;
+    color: #ffffff !important;
+}
+
+/* ================= HERO SECTION ================= */
+.hero-section {
+    background: linear-gradient(to right, #11b2cb, #2664ce);
+    color: white;
+    padding: 100px 0;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    animation: slideInDown 1s ease-in-out;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    animation: slideInUp 1s ease-in-out;
+}
+
+/* ================= FEATURES ================= */
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: zoomIn 1.5s ease-in-out;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 40px;
+    color: #11b2cb;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}

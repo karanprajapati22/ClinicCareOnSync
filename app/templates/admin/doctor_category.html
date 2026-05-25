@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Doctor Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* ===== Clean Hospital Admin Theme ===== */
+        :root {
+            --main: #4FA3D1;
+            --bg: #F3F9FD;
+            --card: #FFFFFF;
+            --border: #D6EAF6;
+        }
+
+        body {
+            background-color: var(--bg);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+
+        /* ===== Main Content ===== */
+        .main-content {
+            margin-left: 240px;
+            padding: 25px;
+        }
+
+        /* ===== Top Bar ===== */
+        .topbar {
+            background: var(--card);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: var(--main);
+        }
+
+        /* ===== Cards ===== */
+        .custom-card {
+            border-radius: 12px;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+        }
+
+        /* ===== Form ===== */
+        .form-label {
+            font-weight: 500;
+        }
+
+        .form-control, select {
+            border-radius: 8px;
+        }
+
+        /* ===== Table ===== */
+        .table thead {
+            background: #E9F4FB;
+        }
+
+        .table thead th {
+            font-weight: 600;
+            color: #2c3e50;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .table tbody td {
+            padding: 14px;
+            border-bottom: 1px solid #edf3f8;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f6fbff;
+        }
+
+        /* ===== Filter Bar ===== */
+        .filter-bar {
+            background-color: #f7fbff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid var(--border);
+        }
+
+        .filter-bar label {
+            font-weight: 500;
+            color: var(--main);
+        }
+
+        /* ===== Buttons ===== */
+        .btn-primary {
+            background-color: var(--main);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 22px;
+        }
+
+        .btn-primary:hover {
+            background-color: #3b8fbd;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== Sidebar ===== -->
+{% include "admin/sidebar.html" %}
+
+
+<!-- ===== Main Content ===== -->
+<div class="main-content">
+
+    <!-- ===== Top Bar ===== -->
+    <div class="topbar">
+        <h4 class="page-title mb-0">Doctor Category Management</h4>
+        <small class="text-muted">Add, filter and manage doctor categories</small>
+    </div>
+
+    <!-- ===== ADD CATEGORY ===== -->
+    <div class="card custom-card mb-4">
+        <div class="card-body">
+
+            <h5 class="fw-semibold mb-3">Add New Category</h5>
+
+            <form method="POST" onsubmit="return validateForm()">
+                {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Category Name</label>
+                        <input type="text" name="category_name" id="category_name"
+                               class="form-control" placeholder="Enter category name">
+                        <small id="error" class="text-danger"></small>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Department</label>
+                        <select name="department_id" class="form-control" required>
+                            <option value="">-- Select Department --</option>
+                            {% for dept in departments %}
+                                <option value="{{ dept.id }}">{{ dept.department_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+                <button class="btn btn-primary mt-2">Add Category</button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ===== CATEGORY LIST ===== -->
+    <div class="card custom-card">
+        <div class="card-body">
+
+            <h5 class="fw-semibold mb-3">Category List</h5>
+
+            <!-- ===== FILTER ===== -->
+            <div class="filter-bar">
+                <label>Filter by Department:</label>
+                <select class="form-control w-auto" id="deptFilter" onchange="filterTable()">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept.department_name }}">{{ dept.department_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table" id="categoryTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Category</th>
+                            <th>Department</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for c in categories %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td style="font-weight:600;">{{ c.category_name }}</td>
+                            <td class="dept-name">{{ c.department.department_name }}</td>
+                            <td>
+                                <a href="{% url 'edit_category' c.id %}" class="btn btn-sm btn-outline-warning me-1">Edit</a>
+                                <a href="{% url 'delete_category' c.id %}" class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">No Categories Found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== JS ===== -->
+<script>
+function validateForm() {
+    let name = document.getElementById("category_name").value.trim();
+    if (name === "") {
+        document.getElementById("error").innerText = "Category name is required";
+        return false;
+    }
+    document.getElementById("error").innerText = "";
+    return true;
+}
+
+function filterTable() {
+    let filter = document.getElementById("deptFilter").value.toLowerCase();
+    let rows = document.querySelectorAll("#categoryTable tbody tr");
+
+    rows.forEach(row => {
+        let dept = row.querySelector(".dept-name")?.innerText.toLowerCase();
+        row.style.display = (!filter || dept === filter) ? "" : "none";
+    });
+}
+</script>
+
+</body>
+</html>

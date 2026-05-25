@@ -1,0 +1,195 @@
+{% include "admin/sidebar.html" %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    :root {
+        --main: #4FA3D1;
+        --bg: #F3F9FD;
+        --card: #FFFFFF;
+        --border: #D6EAF6;
+    }
+
+    body {
+        background: var(--bg);
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    .main-content {
+        margin-left: 240px;
+        padding: 30px;
+    }
+
+    .page-title {
+        font-weight: 700;
+        color: var(--main);
+    }
+
+    .feedback-card {
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        padding: 25px;
+    }
+
+    .filter-section {
+        background: #f8fcff;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        margin-bottom: 25px;
+    }
+
+    .table thead {
+        background: #E9F4FB;
+    }
+
+    .table thead th {
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: center;
+        padding: 14px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .table tbody td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 14px;
+        border-bottom: 1px solid #edf3f8;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f6fbff;
+        transition: 0.3s;
+    }
+
+    .doctor-badge {
+        background: var(--main);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+    }
+
+    .date-badge {
+        background: #f1f1f1;
+        padding: 5px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="main-content">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="page-title mb-1">Doctor Feedback</h4>
+            <small class="text-muted">View patient feedback submitted for doctors</small>
+        </div>
+        <div>
+            <span class="badge bg-primary fs-6">
+                Total: {{ feedbacks|length }}
+            </span>
+        </div>
+    </div>
+
+    <div class="feedback-card">
+
+        <!-- FILTER SECTION -->
+        <form method="GET" class="filter-section row g-3 align-items-end">
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Filter by Doctor</label>
+                <select name="doctor" class="form-select">
+                    <option value="">All Doctors</option>
+                    {% for d in doctors %}
+                        <option value="{{ d.id }}"
+                            {% if selected_doctor == d.id|stringformat:"s" %}selected{% endif %}>
+                            {{ d.doctor_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Filter by Date</label>
+                <input type="date"
+                       name="date"
+                       value="{{ selected_date }}"
+                       class="form-control">
+            </div>
+
+            <div class="col-md-4">
+                <button class="btn btn-primary w-100">
+                    Apply Filters
+                </button>
+            </div>
+
+        </form>
+
+        <!-- FEEDBACK TABLE -->
+        <div class="table-responsive">
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Doctor</th>
+                        <th>Patient Name</th>
+                        <th>Email</th>
+                        <th style="width: 30%;">Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for f in feedbacks %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+                            {% if f.doctor %}
+                                <span class="doctor-badge">
+                                    {{ f.doctor.doctor_name }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">General</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="fw-semibold">
+                            {{ f.name }}
+                        </td>
+
+                        <td>
+                            {{ f.email }}
+                        </td>
+
+                        <td class="text-start">
+                            {{ f.message }}
+                        </td>
+
+                        <td>
+                            <span class="date-badge">
+                                {{ f.created_at|date:"d M Y" }}
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            No feedback found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,105 @@
+{% include "admin/sidebar.html" %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+:root{
+    --main:#4FA3D1;
+    --bg:#F4F8FB;
+    --card:#ffffff;
+    --border:#e3eef6;
+}
+
+body{
+    background:var(--bg);
+}
+
+.main-content{
+    margin-left:240px;
+    padding:30px;
+}
+
+.card-custom{
+    background:var(--card);
+    border-radius:14px;
+    border:1px solid var(--border);
+}
+
+.page-title{
+    font-weight:600;
+    color:var(--main);
+}
+
+.table thead{
+    background:#eaf4fb;
+}
+
+.table th{
+    font-weight:600;
+    color:#2c3e50;
+}
+
+.btn-main{
+    background:var(--main);
+    border:none;
+}
+
+.btn-main:hover{
+    background:#3c8dbc;
+}
+</style>
+
+<div class="main-content">
+
+    <div class="card card-custom shadow-sm p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="page-title mb-0">Doctor Availability List</h4>
+            <a href="{% url 'add_doctor_availability' %}" class="btn btn-main btn-sm px-3">
+                Add Availability
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle text-center">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for a in availabilities %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="fw-semibold">{{ a.doctor.doctor_name }}</td>
+                        <td>{{ a.available_date }}</td>
+                        <td>{{ a.start_time }}</td>
+                        <td>{{ a.end_time }}</td>
+                        <td>
+                            <a href="{% url 'edit_doctor_availability' a.id %}"
+                               class="btn btn-sm btn-outline-primary">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-muted py-4">
+                            No availability found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>

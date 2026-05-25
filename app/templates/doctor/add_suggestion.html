@@ -1,0 +1,110 @@
+{% extends "doctor/doctor_dashboard.html" %}
+{% block content %}
+
+<style>
+.page-title {
+    font-weight: 700;
+    color: #007c9d;
+}
+
+.suggestion-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #333;
+}
+
+textarea {
+    width: 100%;
+    min-height: 140px;
+    border-radius: 12px;
+    border: 1px solid #d6eaf6;
+    padding: 12px;
+    font-size: 14px;
+    resize: none;
+    transition: 0.3s;
+}
+
+textarea:focus {
+    border-color: #007c9d;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0,124,157,0.1);
+}
+
+.btn-save {
+    background-color: #007c9d;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+}
+
+.btn-save:hover {
+    background-color: #006a84;
+    color: #fff;
+}
+
+.btn-cancel {
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+}
+</style>
+
+<div class="container mt-4">
+
+    <!-- Page Title -->
+    <div class="mb-4">
+        <h3 class="page-title">
+            Add Medical Suggestion
+        </h3>
+        <p class="text-muted">
+            Patient: <strong>{{ appointment.patient.username }}</strong>
+        </p>
+    </div>
+
+    <!-- Suggestion Form Card -->
+    <div class="suggestion-card">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Doctor Suggestion / Prescription
+                </label>
+                {{ form.suggestion }}
+            </div>
+
+            <!-- Error Display -->
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    Please correct the error below.
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            <!-- Buttons -->
+            <div class="mt-4">
+                <button type="submit" class="btn btn-save">
+                    Save Suggestion
+                </button>
+
+                <a href="{% url 'doctor_appointments' %}" 
+                   class="btn btn-outline-secondary btn-cancel">
+                   Cancel
+                </a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

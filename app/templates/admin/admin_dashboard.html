@@ -1,0 +1,203 @@
+{% include "admin/sidebar.html" %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    background: #f4f9fd;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* MAIN */
+.main-content {
+    margin-left: 240px;
+    padding: 30px;
+}
+
+/* HEADER */
+.page-title {
+    font-weight: 700;
+    color: #4FA3D1;
+}
+
+/* CARDS */
+.stat-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    transition: 0.3s;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.1);
+}
+
+/* ICON */
+.stat-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.doctor { color: #007c9d; }
+.patient { color: #198754; }
+.appointment { color: #dc3545; }
+
+/* NUMBER */
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* LABEL */
+.stat-label {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+/* CHART CARD */
+.chart-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+/* ACTIVITY */
+.activity-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    height: 100%;
+}
+
+.activity-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-text {
+    font-size: 14px;
+}
+
+.activity-date {
+    font-size: 12px;
+    color: #888;
+}
+</style>
+
+<div class="main-content">
+
+    <!-- HEADER -->
+    <div class="mb-4">
+        <h3 class="page-title">Admin Dashboard</h3>
+        <p class="text-muted">Overview of system statistics</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+            <a href="{% url 'doctor_list' %}" class="stat-card">
+                <div class="stat-icon doctor">
+                    <i class="fa-solid fa-user-doctor"></i>
+                </div>
+                <div class="stat-number">{{ total_doctors }}</div>
+                <div class="stat-label">Total Doctors</div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'admin_users' %}" class="stat-card">
+                <div class="stat-icon patient">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="stat-number">{{ total_patients }}</div>
+                <div class="stat-label">Total Patients</div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a href="{% url 'admin_appointments' %}" class="stat-card">
+                <div class="stat-icon appointment">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="stat-number">{{ total_appointments }}</div>
+                <div class="stat-label">Total Appointments</div>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- CHART + ACTIVITY -->
+    <div class="row g-4">
+
+        <!-- CHART -->
+        <div class="col-md-8">
+            <div class="chart-card">
+                <h5 class="mb-3">Appointments Overview</h5>
+                <canvas id="appointmentChart" height="120"></canvas>
+            </div>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="col-md-4">
+            <div class="activity-card">
+                <h5 class="mb-3">Recent Activity</h5>
+
+                {% for a in recent_appointments %}
+                <div class="activity-item">
+                    <div class="activity-text">
+                        <strong>{{ a.patient.username }}</strong> booked appointment
+                    </div>
+                    <div class="activity-date">
+                        {{ a.appointment_date }}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No recent activity</p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CHART SCRIPT -->
+<script>
+const ctx = document.getElementById('appointmentChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Doctors', 'Patients', 'Appointments'],
+        datasets: [{
+            label: 'System Data',
+            data: [
+                {{ total_doctors }},
+                {{ total_patients }},
+                {{ total_appointments }}
+            ],
+            borderRadius: 10
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        }
+    }
+});
+</script>

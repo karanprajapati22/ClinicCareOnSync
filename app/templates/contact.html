@@ -1,0 +1,125 @@
+{% extends "nav.html" %}
+{% block content %}
+
+<style>
+.contact-wrapper {
+    max-width: 520px;   /* Smaller width */
+    margin: auto;
+}
+
+.contact-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.contact-header {
+    background: #007c9d;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+}
+
+.contact-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.contact-body {
+    padding: 25px;
+}
+
+.contact-body label {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.contact-body input,
+.contact-body select,
+.contact-body textarea {
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.contact-body textarea {
+    min-height: 100px;   /* Small suggestion box */
+    resize: none;
+}
+
+.contact-btn {
+    background: #007c9d;
+    color: #fff;
+    padding: 8px 28px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: none;
+}
+
+.contact-btn:hover {
+    background: #00657f;
+}
+</style>
+
+<div class="container my-5">
+    <div class="contact-wrapper">
+
+        <div class="contact-card">
+
+            <!-- HEADER -->
+            <div class="contact-header">
+                <h5>Doctor Feedback</h5>
+            </div>
+
+            <!-- BODY -->
+            <div class="contact-body">
+
+                {% if messages %}
+                    {% for msg in messages %}
+                        <div class="alert alert-success text-center py-2">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label>Select Doctor</label>
+                        {{ form.doctor }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Your Name</label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Your Email</label>
+                        {{ form.email }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Suggestion</label>
+                        {{ form.message }}
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <button type="submit" class="contact-btn">
+                            Submit
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

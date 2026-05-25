@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor Register | Hospital</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    height: 100vh;
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(to right, #eaf6fb, #f7fbfd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 650px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.register-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #007c9d;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: #444;
+}
+
+.form-control, select {
+    border-radius: 8px;
+    height: 38px;
+    font-size: 0.9rem;
+}
+
+.btn-register {
+    background-color: #007c9d;
+    border: none;
+    border-radius: 25px;
+    padding: 9px;
+    font-weight: 500;
+    width: 100%;
+}
+
+.btn-register:hover {
+    background-color: #00627a;
+}
+
+.small-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.small-link a {
+    color: #007c9d;
+    text-decoration: none;
+    font-weight: 500;
+}
+</style>
+</head>
+<body>
+
+<div class="register-card">
+
+    <div class="register-title">Doctor Registration</div>
+
+    {% if message %}
+        <div class="alert alert-success p-2 small">{{ message }}</div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger p-2 small">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row g-3">
+
+            <!-- Doctor Name -->
+            <div class="col-6">
+                <label class="form-label">Doctor Name</label>
+                <input type="text" name="doctor_name" class="form-control" placeholder="e.g. Alex" required>
+            </div>
+
+            <!-- Email -->
+            <div class="col-6">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <!-- Mobile -->
+            <div class="col-6">
+                <label class="form-label">Mobile Number</label>
+                <input type="text" name="mobile" class="form-control" required>
+            </div>
+
+            <!-- Qualification -->
+            <div class="col-6">
+                <label class="form-label">Qualification</label>
+                <input type="text" name="qualification" class="form-control" required>
+            </div>
+
+            <!-- Password -->
+            <div class="col-6">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="col-6">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="confirm_password" class="form-control" required>
+            </div>
+
+            <!-- Department -->
+            <div class="col-6">
+                <label class="form-label">Department</label>
+                <select name="department" class="form-control" required>
+                    <option value="">Select Department</option>
+                    {% for d in departments %}
+                        <option value="{{ d.id }}">{{ d.department_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Category -->
+            <div class="col-6">
+                <label class="form-label">Doctor Category</label>
+                <select name="category" class="form-control" required>
+                    <option value="">Select Category</option>
+                    {% for c in categories %}
+                        <option value="{{ c.id }}">{{ c.category_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Experience -->
+            <div class="col-6">
+                <label class="form-label">Experience (Years)</label>
+                <input type="number" name="experience" class="form-control" min="0" required>
+            </div>
+
+            <!-- Photo -->
+            <div class="col-6">
+                <label class="form-label">Doctor Photo</label>
+                <input type="file" name="photo" class="form-control" required>
+            </div>
+
+            <!-- Certificate -->
+            <div class="col-12">
+                <label class="form-label">Medical Certificate</label>
+                <input type="file" name="certificate" class="form-control" required>
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-register mt-3">
+            Register
+        </button>
+
+    </form>
+
+    <div class="small-link">
+        Already registered?
+        <a href="{% url 'doctor_login' %}">Login</a>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+{% extends "doctor/doctor_dashboard.html" %}
+{% block content %}
+
+<style>
+.service-page {
+    max-width: 700px;
+    margin: auto;
+}
+
+.service-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 18px 40px rgba(0, 124, 157, 0.12);
+    overflow: hidden;
+    border: 1px solid #d9edf5;
+}
+
+.service-header {
+    background: linear-gradient(135deg, #007c9d, #11b2cb);
+    color: #ffffff;
+    padding: 24px;
+    text-align: center;
+}
+
+.service-header h4 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.service-body {
+    padding: 28px;
+}
+
+.service-body label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #134b5f;
+    display: block;
+}
+
+.service-body input,
+.service-body textarea {
+    width: 100%;
+    border: 1px solid #cfe4ec;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 14px;
+    background: #f9fdff;
+    outline: none;
+}
+
+.service-body textarea {
+    min-height: 120px;
+    resize: none;
+}
+
+.service-btn {
+    background: linear-gradient(135deg, #007c9d, #11b2cb);
+    color: #fff;
+    padding: 10px 30px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+}
+</style>
+
+<div class="container my-5">
+    <div class="service-page">
+        <div class="service-card">
+
+            <div class="service-header">
+                <h4>Edit Service</h4>
+            </div>
+
+            <div class="service-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label>Service Name</label>
+                        {{ form.service_name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Short Description</label>
+                        {{ form.short_description }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Service Image</label>
+                        {{ form.service_image }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Icon Class</label>
+                        {{ form.icon_class }}
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="service-btn">Update Service</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

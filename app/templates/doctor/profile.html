@@ -1,0 +1,164 @@
+{% extends "doctor/doctor_dashboard.html" %}
+{% block content %}
+
+<style>
+.profile-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* CARD */
+.profile-card {
+    width: 900px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+/* HEADER */
+.profile-header {
+    background: linear-gradient(135deg, #007c9d, #11b2cb);
+    color: #fff;
+    padding: 18px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* BODY */
+.profile-body {
+    padding: 20px 30px;
+}
+
+/* IMAGE */
+.profile-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: auto;
+    display: block;
+    margin-bottom: 10px;
+    border: 3px solid #eaf6fb;
+}
+
+/* GRID */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* INPUT */
+.form-control {
+    height: 40px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* BUTTON */
+.profile-footer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.update-btn {
+    background: linear-gradient(135deg, #007c9d, #11b2cb);
+    color: #fff;
+    padding: 10px 35px;
+    border-radius: 30px;
+    border: none;
+}
+
+.update-btn:hover {
+    box-shadow: 0 8px 20px rgba(0,124,157,0.2);
+}
+</style>
+
+<div class="profile-container">
+
+    <div class="profile-card">
+
+        <!-- HEADER -->
+        <div class="profile-header">
+            Doctor Profile
+        </div>
+
+        <div class="profile-body">
+
+            <!-- IMAGE -->
+            {% if doctor.photo %}
+                <img src="{{ doctor.photo.url }}" class="profile-avatar">
+            {% else %}
+                <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="profile-avatar">
+            {% endif %}
+
+            <h5 class="text-center mb-3">Dr. {{ doctor.doctor_name }}</h5>
+
+            <!-- MESSAGE -->
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="alert alert-success text-center">
+                        {{ msg }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- FORM -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="form-grid">
+
+                    <div>
+                        <label>Name</label>
+                        <input type="text" name="doctor_name" class="form-control"
+                               value="{{ doctor.doctor_name }}">
+                    </div>
+
+                    <div>
+                        <label>Mobile</label>
+                        <input type="text" name="mobile" class="form-control"
+                               value="{{ doctor.mobile }}">
+                    </div>
+
+                    <div>
+                        <label>Qualification</label>
+                        <input type="text" name="qualification" class="form-control"
+                               value="{{ doctor.qualification }}">
+                    </div>
+
+                    <div>
+                        <label>Experience (Years)</label>
+                        <input type="text" name="experience" class="form-control"
+                               value="{{ doctor.experience }}">
+                    </div>
+
+                    <div class="full-width">
+                        <label>Profile Photo</label>
+                        <input type="file" name="photo" class="form-control">
+                    </div>
+
+                </div>
+
+                <div class="profile-footer">
+                    <button type="submit" class="update-btn">
+                        Update Profile
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

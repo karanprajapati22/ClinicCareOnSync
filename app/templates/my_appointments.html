@@ -1,0 +1,215 @@
+{% extends "nav.html" %}
+{% block content %}
+
+<style>
+/* ===== PAGE BACKGROUND ===== */
+.appointments-wrapper {
+    background: linear-gradient(135deg, #f4f9fc, #eef6fb);
+    padding: 50px 0;
+}
+
+/* ===== MAIN CARD ===== */
+.appointments-card {
+    background: #ffffff;
+    border-radius: 22px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.12);
+    padding: 35px;
+}
+
+/* ===== HEADER ===== */
+.appointments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.appointments-header h3 {
+    color: #007c9d;
+    font-weight: 600;
+}
+
+/* ===== FILTERS ===== */
+.filter-box {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-select {
+    border-radius: 30px;
+    padding: 6px 16px;
+    font-size: 14px;
+}
+
+/* ===== TABLE ===== */
+.table {
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: #eaf4fb;
+}
+
+.table th {
+    font-weight: 600;
+    color: #495057;
+    padding: 14px;
+}
+
+.table td {
+    padding: 14px;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background: #f6fbff;
+}
+
+/* ===== STATUS BADGES ===== */
+.status-pending {
+    background: #fff4d6;
+    color: #c69500;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.status-approved {
+    background: #e8f8ef;
+    color: #198754;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.status-rejected {
+    background: #fdecea;
+    color: #dc3545;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.status-paid {
+    background: #d1ecf1;
+    color: #0c5460;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.status-unpaid {
+    background: #f8d7da;
+    color: #721c24;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+/* ===== VIEW BUTTON ===== */
+.view-btn {
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 13px;
+}
+</style>
+
+<section class="appointments-wrapper">
+    <div class="container">
+
+        <div class="appointments-card">
+
+            <!-- HEADER + FILTER -->
+            <div class="appointments-header">
+                <div>
+                    <h3>My Appointments</h3>
+                    <small class="text-muted">
+                        View and track your scheduled visits
+                    </small>
+                </div>
+
+                <form method="get" class="filter-box">
+                    <select name="status" class="form-select filter-select">
+                        <option value="">All Status</option>
+                        <option value="Pending" {% if status_filter == "Pending" %}selected{% endif %}>Pending</option>
+                        <option value="Approved" {% if status_filter == "Approved" %}selected{% endif %}>Approved</option>
+                        <option value="Rejected" {% if status_filter == "Rejected" %}selected{% endif %}>Rejected</option>
+                    </select>
+
+                    <select name="sort" class="form-select filter-select">
+                        <option value="latest">Latest</option>
+                        <option value="date_asc" {% if sort == "date_asc" %}selected{% endif %}>Date ↑</option>
+                        <option value="date_desc" {% if sort == "date_desc" %}selected{% endif %}>Date ↓</option>
+                    </select>
+
+                    <button class="btn btn-outline-primary px-4 rounded-pill">
+                        Apply
+                    </button>
+                </form>
+            </div>
+
+            <!-- TABLE -->
+            {% if appointments %}
+            <div class="table-responsive">
+                <table class="table table-borderless text-center">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Doctor</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for appt in appointments %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="fw-semibold">{{ appt.doctor }}</td>
+                            <td>{{ appt.appointment_date }}</td>
+                            <td>{{ appt.appointment_time }}</td>
+                            <td>
+                                {% if appt.status == "Pending" %}
+                                    <span class="status-pending">Pending</span>
+                                {% elif appt.status == "Approved" %}
+                                    <span class="status-approved">Approved</span>
+                                {% else %}
+                                    <span class="status-rejected">Rejected</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if appt.is_paid %}
+                                    <span class="status-paid">Paid</span>
+                                {% elif appt.status == "Approved" %}
+                                    <span class="status-unpaid">Unpaid</span>
+                                    <a href="{% url 'initiate_payment' appt.id %}" class="btn btn-sm btn-success rounded-pill ms-2">Pay ₹500</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'appointment_status' appt.id %}"
+                                   class="btn btn-sm btn-outline-primary view-btn">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p class="text-center text-muted py-4">
+                    No appointments found.
+                </p>
+            {% endif %}
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

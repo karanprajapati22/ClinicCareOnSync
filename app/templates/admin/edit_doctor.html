@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin - Edit Doctor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --main: #4FA3D1;
+            --bg: #F3F9FD;
+            --card: #FFFFFF;
+            --border: #D6EAF6;
+        }
+
+        body {
+            background-color: var(--bg);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            width: 240px;
+            height: 100vh;
+            background: var(--main);
+            color: #fff;
+            padding-top: 20px;
+        }
+
+        .sidebar h4 {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            margin: 4px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 25px;
+        }
+
+        .topbar {
+            background: var(--card);
+            padding: 16px 22px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: var(--main);
+        }
+
+        .edit-card {
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            max-width: 1000px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            height: 42px;
+        }
+
+        .doctor-img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .media-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            background: #fafcff;
+        }
+
+        .btn-main {
+            background: var(--main);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 26px;
+            color: #fff;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h4>Admin Panel</h4>
+    <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+    <a href="{% url 'admin_departments' %}">Departments</a>
+    <a href="{% url 'doctor_category' %}">Doctor Categories</a>
+    <a href="{% url 'doctor_list' %}">Doctors</a>
+    <a href="{% url 'admin_users' %}">Users</a>
+    <a href="{% url 'admin_logout' %}">Logout</a>
+</div>
+
+<!-- MAIN -->
+<div class="main-content">
+
+    <div class="topbar">
+        <h4 class="page-title mb-0">Edit Doctor</h4>
+        <small class="text-muted">Update doctor information</small>
+    </div>
+
+    <div class="edit-card p-4">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Doctor Name</label>
+                    <input type="text" name="doctor_name" value="{{ doctor.doctor_name }}" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Mobile</label>
+                    <input type="text" name="mobile" value="{{ doctor.mobile }}" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Qualification</label>
+                    <input type="text" name="qualification" value="{{ doctor.qualification }}" class="form-control" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Experience (Years)</label>
+                    <input type="number" name="experience" value="{{ doctor.experience }}" class="form-control" min="0" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Department</label>
+                    <select name="department_id" class="form-control">
+                        {% for d in departments %}
+                        <option value="{{ d.id }}" {% if d.id == doctor.department.id %}selected{% endif %}>
+                            {{ d.department_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Category</label>
+                    <select name="category_id" class="form-control">
+                        {% for c in categories %}
+                        <option value="{{ c.id }}" {% if c.id == doctor.category.id %}selected{% endif %}>
+                            {{ c.category_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- PHOTO -->
+                <div class="col-md-6">
+                    <label class="form-label">Doctor Photo</label>
+                    <div class="media-box">
+                        <img src="{{ doctor.photo.url }}" class="doctor-img">
+                        <input type="file" name="photo" class="form-control">
+                    </div>
+                </div>
+
+                <!-- CERTIFICATE -->
+                <div class="col-md-6">
+                    <label class="form-label">Certificate</label>
+                    <div class="media-box">
+                        <a href="{{ doctor.certificate.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            View
+                        </a>
+                        <input type="file" name="certificate" class="form-control">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-main">Update Doctor</button>
+                <a href="{% url 'doctor_list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
