@@ -119,8 +119,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Razorpay settings
-RAZORPAY_KEY_ID = 'rzp_test_SJu5il5xtKbkbg'
-RAZORPAY_KEY_SECRET = 'mIt0DBhRgrAF28uoVEnujU1N'
+RAZORPAY_KEY_ID = 'rzp_test_TidCIndCcbo8Gy'
+RAZORPAY_KEY_SECRET = 'lobBMKxEQJjzu12qnajktwLV'
 APPOINTMENT_FEE = 500  # in INR
 
 LOGIN_URL = '/login/'
