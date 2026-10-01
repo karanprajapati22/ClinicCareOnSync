@@ -137,12 +137,13 @@ CSRF_USE_SESSIONS = False
 CSRF_COOKIE_SAMESITE = "Lax"
 
 # Email send Process
-
+# Use a Gmail App Password, not your normal Gmail password.
+# Remove spaces from the app password if Google shows it in groups of 4 chars.
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'karanprajapati9033@gmail.com'
-EMAIL_HOST_PASSWORD = 'ompy oris crxd hbmj'
+EMAIL_HOST_USER = 'karanprajapati9157@gmail.com'
+EMAIL_HOST_PASSWORD = 'qpfzoinxcjyuexyk'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-DEFAULT_FROM_EMAIL = 'Clinic Care On Sync <karanprajapati9033@gmail.com>'
+DEFAULT_FROM_EMAIL = 'Clinic Care On Sync <karanprajapati9157@gmail.com>'
