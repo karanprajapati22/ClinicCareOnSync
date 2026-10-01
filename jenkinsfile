@@ -1,0 +1,51 @@
+pipeline {
+
+    agent { label 'dev-server' }
+
+    stages {
+
+        stage("Code Clone") {
+            steps {
+                git(
+                    url: 'git@github.com:karanprajapati22/ClinicCareonSync.git',
+                    branch: 'main',
+                    credentialsId: 'github-ssh'
+                )
+            }
+        }
+
+        stage("Test") {
+            steps {
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                    python manage.py test
+                '''
+            }
+        }
+
+        stage("Docker Build") {
+            steps {
+                sh '''
+                    docker build -t karan2254/cliniccareonsync:latest .
+                '''
+            }
+        }
+
+        stage("Push to DockerHub") {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerHubCreds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push karan2254/cliniccareonsync:latest
+                    '''
+                }
+            }
+        }
+    }
+}
